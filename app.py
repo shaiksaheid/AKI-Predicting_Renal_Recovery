@@ -7,12 +7,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, roc_auc_score, classification_report
 from sklearn.preprocessing import LabelEncoder
-from flask import Flask, request, render_template, jsonify
-#from model_training import train_and_evaluate_model 
-
-DATABASE_PATH = os.path.abspath("aki_data.db")  
 
 app = Flask(__name__)
+
+
+DATABASE_PATH = os.path.abspath("aki_data.db")  
 
 # Initialize Database
 def init_db():
@@ -206,7 +205,5 @@ def previous_data():
 
     return render_template("previous_data.html", data=processed_data, columns=columns)
 
-
-from flask import Flask
-app = Flask(__name__)
-
+if __name__ == "__main__":
+    app.run(debug=True)
