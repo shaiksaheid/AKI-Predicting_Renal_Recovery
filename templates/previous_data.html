@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previous Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin: 20px auto;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            table-layout: auto;
+            word-wrap: break-word;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .status-recovered {
+            color: green;
+            font-weight: bold;
+        }
+        .status-critical {
+            color: red;
+            font-weight: bold;
+        }
+        button {
+            background-color: #008CBA;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #005f73;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Previous Patient Data</h2>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% elif data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Bicarbonate Max</th>
+                    <th>Bicarbonate Mean</th>
+                    <th>Bicarbonate Min</th>
+                    <th>Bilirubin</th>
+                    <th>BP Max</th>
+                    <th>BP Mean</th>
+                    <th>BP Min</th>
+                    <th>BUN Max</th>
+                    <th>BUN Mean</th>
+                    <th>BUN Min</th>
+                    <th>Days in ICU</th>
+                    <th>FIO2</th>
+                    <th>GCS Max</th>
+                    <th>GCS Mean</th>
+                    <th>GCS Min</th>
+                    <th>HR Max</th>
+                    <th>HR Mean</th>
+                    <th>HR Min</th>
+                    <th>PaO2 Max</th>
+                    <th>PaO2 Mean</th>
+                    <th>PaO2 Min</th>
+                    <th>Potassium Max</th>
+                    <th>Potassium Mean</th>
+                    <th>Potassium Min</th>
+                    <th>Sodium Max</th>
+                    <th>Sodium Mean</th>
+                    <th>Sodium Min</th>
+                    <th>Temperature</th>
+                    <th>WBC Max</th>
+                    <th>WBC Mean</th>
+                    <th>WBC Min</th>
+                    <th>Prediction</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                        {% for i in range(row|length - 1) %} 
+                            <td>{{ row[i] if row[i] is not none and row[i] != "" else "N/A" }}</td>
+                        {% endfor %}
+                        <td>
+                            {% set prediction = row[-1] | string | lower | trim %}
+                            {% if "die" in prediction %}
+                                <span class="status-critical">PATIENT HAS CHANCES TO DIE</span>
+                            {% elif "recovered" in prediction %}
+                                <span class="status-recovered">PATIENT WILL BE RECOVERED</span>
+                            {% else %}
+                                <span class="status-unknown">UNKNOWN STATUS</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            
+            
+        </table>
+    {% else %}
+        <p>No data available.</p>
+    {% endif %}
+
+    <button onclick="window.location.href='/'">Back to Input Form</button>
+
+</body>
+</html>
